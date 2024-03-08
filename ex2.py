@@ -68,8 +68,8 @@ class Controller:
                 action = moves[a]
 
             next_state, reward = self.get_next_state_and_reward(action)
-            self.q_table[current_state][action] += (self.alpha * (reward + self.gamma * max(self.q_table[next_state]) -
-                                                                  self.q_table[current_state][action]))
+            self.q_table[current_state][a] += (self.alpha * (reward + self.gamma * max(self.q_table[next_state]) -
+                                                                  self.q_table[current_state][a]))
 
             current_state = next_state
             if self.game.done:
@@ -79,12 +79,11 @@ class Controller:
 
 
     def get_next_state_and_reward(self, action):
-        p = 0.7
+        p = 0.8
         reward = 0
         moves = list(self.game.actions.keys())
         if action not in moves:
             print("This is wrong!")
-
         if random.random() < p:
             reward += self.game.update_board(self.game.actions[action])
         else:
@@ -97,23 +96,7 @@ class Controller:
         "Choose next action for Pacman given the current state of the board."
         moves = ['L', 'D', 'R', 'U']
         state = self.N * locations[7][0] + locations[7][1]
+        # get the best action from the trained q-table
         action = max(range(4), key=lambda a: self.q_table[state][a])
         return moves[action]
-        # moves = ['L', 'D', 'R', 'U']
-        # pacman_location = locations[7]
-        # if random.random() < self.epsilon:
-        #     action = random.choice(moves)
-        #     return action
-        # else:
-        #     # Greedy action for exploitation
-        #
-        #     state = self.N * locations[7][0]
-        #     # get the best action to make from current state according to the q-table
-        #     action = max(range(4), key=lambda a: self.q_table[state][a])
-        #     # get the next_state and reward
-        #     next_state, reward = self.get_next_state_and_prize(locations, pellets)
-        #     # update the q_table
-        #     self.q_table[state][action] += (self.alpha * (reward + self.gamma * max(self.q_table[next_state]) -
-        #                                                   self.q_table[state][action]))
-        #
-        #     return moves[action]
+
