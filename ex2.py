@@ -37,16 +37,14 @@ class Controller:
         self.alpha = 0.1        # Learning rate
         self.gamma = 0.9        # Discount factor
         self.epsilon = 0.1      # Exploration-exploitation tradeoff
-        self.episodes = 2000    # number of episodes to make
+        self.episodes = 4000    # number of episodes to make
         self.q_table = [[0.0] * 4 for i in range(M * N)]  # init the q_table with M*N rows and 4 cols
         self.steps = steps
         self.N = N
         self.M = M
-        self.init_locations = init_locations
-        self.init_pellets = init_pellets
-        self.init_board = board_from_dicts(init_locations, init_pellets, N, M)
+        init_board = board_from_dicts(init_locations, init_pellets, N, M)
         # create a game object in order to simulate the game for the train
-        self.game = pacman.Game(steps, self.init_board.copy())
+        self.game = pacman.Game(steps, init_board.copy())
         moves = ['L', 'D', 'R', 'U']
         for _ in range(self.episodes):
             if time.time() - start_time > 5:
@@ -81,7 +79,7 @@ class Controller:
                     # start a new game
                     self.game.reset()
                 step += 1
-        print(self.q_table)
+        # print(self.q_table)
 
     def get_next_state_and_reward(self, action):
         p = 0.8
